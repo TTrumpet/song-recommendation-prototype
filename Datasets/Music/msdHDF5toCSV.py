@@ -75,7 +75,7 @@ class Song:
 
 
 def main():
-    outputFile1 = open('SongCSV.csv', 'w')
+    outputFile1 = open('Datasets/Music/SongCSV.csv', 'w')
     csvRowString = ""
 
     #################################################
