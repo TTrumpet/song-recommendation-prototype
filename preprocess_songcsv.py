@@ -1,20 +1,8 @@
 import pandas as pd
 import numpy as np
 
-# Load the files
-df = pd.read_csv('Datasets/Music/train_triplets.txt',
-                 delimiter='\t', names=['User-ID', 'SongID', 'Rating'])
-songs = pd.read_csv('Datasets/Music/SongCSV.csv')
 
-
-def create_user_data():
-    # Load unique users
-    users = df['User-ID'].unique()
-    users = pd.DataFrame(users, columns=['User-ID'])
-    users.to_csv("Datasets/Music/user_data.csv")
-
-
-def remove_trailing_characters():
+def remove_trailing_characters(songs):
     # for columns SongID, AlbumName, ArtistID, ArtistLocation, ArtistName, Title
     songs['SongID'] = songs['SongID'].str.replace('b\'', "")
     songs['SongID'] = songs['SongID'].str.replace('\'', "")

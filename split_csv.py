@@ -14,8 +14,7 @@ df = pd.read_csv('Datasets/Music/train_triplets.txt',
 songs = pd.read_csv('Datasets/Music/SongCSV.csv')
 
 # preprocess SongCSV to remove trailing characters
-preprocess_songcsv.create_user_data()
-preprocess_songcsv.remove_trailing_characters()
+preprocess_songcsv.remove_trailing_characters(songs)
 
 # preprocess 'number of times played' to 'rating'
 
