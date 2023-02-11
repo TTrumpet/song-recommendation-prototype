@@ -1,0 +1,36 @@
+{
+    "os": "Windows-10-10.0.22621-SP0",
+    "python": "3.10.9",
+    "heartbeatAt": "2023-01-31T22:10:36.598902",
+    "startedAt": "2023-01-31T22:10:35.983748",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "C:\\Users\\Abhinav\\Desktop\\RecSystem (1)\\RecSystem\\main.py",
+    "codePath": "main.py",
+    "host": "DESKTOP-0SI5TJO",
+    "username": "Abhinav",
+    "executable": "C:\\dev\\Python\\python.exe",
+    "cpu_count": 4,
+    "cpu_count_logical": 8,
+    "cpu_freq": {
+        "current": 2304.0,
+        "min": 0.0,
+        "max": 2304.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 2304.0,
+            "min": 0.0,
+            "max": 2304.0
+        }
+    ],
+    "disk": {
+        "total": 930.7578086853027,
+        "used": 234.49737930297852
+    },
+    "memory": {
+        "total": 7.764259338378906
+    }
+}

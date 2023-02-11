@@ -10,7 +10,7 @@ df = pd.read_csv('Datasets/Music/train_triplets.csv')
 print(df)
 
 # Remove ratings whose User ID or Book ID is not in the Users or Books CSV file
-songs = pd.read_csv('Datasets/Music/SongCSV(2).csv')
+songs = pd.read_csv('Datasets/Music/SongCSV.csv')
 
 users = pd.read_csv('Datasets/Music/user_data.csv')
 print(users)

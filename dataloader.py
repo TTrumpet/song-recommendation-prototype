@@ -44,7 +44,7 @@ class Music(Dataset):
         self.all_users = pd.read_csv(
             'Datasets/Music/user_data.csv', dtype={'User-ID': str})
 
-        self.all_songs = pd.read_csv('Datasets/Music/SongCSV(2).csv', dtype={'SongNumber': int, 'SongID': str, 'AlbumID': str, 'AlbumName': str, 'ArtistID': str, 'ArtistLatitude': float, 'ArtistLocation': str,
+        self.all_songs = pd.read_csv('Datasets/Music/SongCSV.csv', dtype={'SongNumber': int, 'SongID': str, 'AlbumID': str, 'AlbumName': str, 'ArtistID': str, 'ArtistLatitude': float, 'ArtistLocation': str,
                                                                              'ArtistLongitude': float, 'ArtistName': str, 'Danceability': float, 'Duration': float, 'KeySignature': int, 'KeySignatureConfidence': float, 'Tempo': float, 'TimeSignature': int, 'TimeSignatureConfidence': float, 'Title': str, 'Year': int}, index=None)
 
         # Note: Including the dtype parameter in the pd.read_csv function (^) is not necessary,

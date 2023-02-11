@@ -1,0 +1,348 @@
+
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1612/1612 [00:03<00:00, 449.83it/s]
+  0%|                                                                                                                                         | 0/6445 [00:00<?, ?it/s]
+Epoch 0 Validation Loss: 19.5492
+Outputting loss every 100 batches
+Validating every 1000 batches
+Epoch 0 Loss: 19.1965:   0%|                                                                                                                  | 0/6445 [00:00<?, ?it/s]
+
+Epoch 0 Loss: 19.1965:   0%|                                                                                                          | 6/6445 [00:04<36:14,  2.96it/s]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Epoch 0 Loss: 19.5553:  16%|███████████████▉                                                                                       | 1000/6445 [01:53<18:50,  4.82it/s]
+
+Epoch 0 Loss: 19.5553:  16%|███████████████▋                                                                                     | 1002/6445 [01:57<1:13:12,  1.24it/s]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Epoch 0 Loss: 19.4889:  31%|███████████████████████████████▉                                                                       | 1999/6445 [03:46<07:08, 10.37it/s]
+
+Epoch 0 Loss: 19.4889:  31%|████████████████████████████████                                                                       | 2005/6445 [03:49<24:02,  3.08it/s]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Epoch 0 Loss: 19.0705:  47%|███████████████████████████████████████████████▉                                                       | 3000/6445 [05:46<10:50,  5.29it/s]
+
+ 94%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▍       | 1514/1612 [00:03<00:00, 537.22it/s]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Epoch 0 Loss: 18.5580:  62%|███████████████████████████████████████████████████████████████▉                                       | 4000/6445 [07:37<08:30,  4.79it/s]
+
+
+Epoch 0 Loss: 18.5580:  62%|████████████████████████████████████████████████████████████████▏                                      | 4016/6445 [07:41<04:48,  8.41it/s]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Epoch 0 Loss: 18.0901:  78%|███████████████████████████████████████████████████████████████████████████████▉                       | 5000/6445 [09:30<03:04,  7.81it/s]
+
+ 63%|███████████████████████████████████████████████████████████████████████████████▏                                             | 1021/1612 [00:02<00:00, 604.20it/s]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Epoch 0 Loss: 17.8795:  86%|████████████████████████████████████████████████████████████████████████████████████████▊              | 5555/6445 [10:42<01:42,  8.64it/s]
+Traceback (most recent call last):
+  File "C:\Users\Abhinav\Desktop\RecSystem (1)\RecSystem\main.py", line 66, in <module>
+    loss = train(train_dataloader=train_dataloader,
+  File "C:\Users\Abhinav\Desktop\RecSystem (1)\RecSystem\train_and_eval.py", line 76, in train
+    for i , (encoded_user_id, encoded_book_id, rating, user_id, book_id) in bar:
+  File "C:\dev\Python\lib\site-packages\tqdm\std.py", line 1205, in __iter__
+    self.update(n - last_print_n)
+  File "C:\dev\Python\lib\site-packages\tqdm\std.py", line 1256, in update
+    self.refresh(lock_args=self.lock_args)
+  File "C:\dev\Python\lib\site-packages\tqdm\std.py", line 1361, in refresh
+    self.display()
+  File "C:\dev\Python\lib\site-packages\tqdm\std.py", line 1509, in display
+    self.sp(self.__str__() if msg is None else msg)
+  File "C:\dev\Python\lib\site-packages\tqdm\std.py", line 1165, in __str__
+    return self.format_meter(**self.format_dict)
+  File "C:\dev\Python\lib\site-packages\tqdm\std.py", line 355, in format_meter
+    @staticmethod
+KeyboardInterrupt
