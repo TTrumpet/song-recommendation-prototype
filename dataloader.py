@@ -45,7 +45,7 @@ class Music(Dataset):
             'Datasets/Music/user_data.csv', dtype={'User-ID': str})
 
         self.all_songs = pd.read_csv('Datasets/Music/SongCSV.csv', dtype={'SongNumber': int, 'SongID': str, 'AlbumID': str, 'AlbumName': str, 'ArtistID': str, 'ArtistLatitude': float, 'ArtistLocation': str,
-                                                                             'ArtistLongitude': float, 'ArtistName': str, 'Danceability': float, 'Duration': float, 'KeySignature': int, 'KeySignatureConfidence': float, 'Tempo': float, 'TimeSignature': int, 'TimeSignatureConfidence': float, 'Title': str, 'Year': int}, index=None)
+                                                                             'ArtistLongitude': float, 'ArtistName': str, 'Danceability': float, 'Duration': float, 'KeySignature': int, 'KeySignatureConfidence': float, 'Tempo': float, 'TimeSignature': int, 'TimeSignatureConfidence': float, 'Title': str, 'Year': int})
 
         # Note: Including the dtype parameter in the pd.read_csv function (^) is not necessary,
         # but it is good practice to do so, as it will prevent pandas from having to infer
@@ -53,7 +53,7 @@ class Music(Dataset):
 
         # Get (User ID, Book ID, User Rating) tuples
         self.user_ids = self.ratings['User-ID'].values
-        self.song_ids = self.ratings['song_id'].values
+        self.song_ids = self.ratings['SongID'].values
         self.ratings = self.ratings['Rating'].values
 
         # Set general attributes
