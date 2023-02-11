@@ -23,7 +23,7 @@ songs = pd.read_csv('Datasets/Music/SongCSV.csv')
 users = pd.read_csv('Datasets/Music/user_data.csv')
 
 # Remove ratings for songs not in songs.csv
-df = df[df['song_id'].isin(songs['SongID'])]
+df = df[df['SongID'].isin(songs['SongID'])]
 # Remove ratings for users not in Users.csv
 df = df[df['User-ID'].isin(users['User-ID'])]
 
