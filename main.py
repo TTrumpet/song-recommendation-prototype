@@ -49,7 +49,7 @@ if __name__ == '__main__':
 
     # ----------------------- Setting up Weight and Biases ----------------------- #
     if opt.wandb:
-        w = wandb.init(project='Music Recommender',
+        w = wandb.init(project='Song Recommender Prototype',
                        entity='YOUR_USERNAME',
                        settings=wandb.Settings(start_method='spawn'),
                        config=config)

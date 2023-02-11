@@ -2,23 +2,28 @@
 # we will need to manually split it into train and test sets.
 
 import num_played_to_rating
+import preprocess_songcsv
 import pandas as pd
 import numpy as np
 
 # Load the Ratings CSV file
-df = pd.read_csv('Datasets/Music/train_triplets.csv')
-print(df)
+df = pd.read_csv('Datasets/Music/train_triplets.txt',
+                 delimiter='\t', names=['User-ID', 'SongID', 'Rating'])
 
-# Remove ratings whose User ID or Book ID is not in the Users or Books CSV file
+# Load Songs CSV file
 songs = pd.read_csv('Datasets/Music/SongCSV.csv')
 
-users = pd.read_csv('Datasets/Music/user_data.csv')
-print(users)
+# preprocess SongCSV to remove trailing characters
+preprocess_songcsv.create_user_data()
+preprocess_songcsv.remove_trailing_characters()
 
 # preprocess 'number of times played' to 'rating'
 
 
-# Remove ratings for books not in Books.csv
+songs = pd.read_csv('Datasets/Music/SongCSV.csv')
+users = pd.read_csv('Datasets/Music/user_data.csv')
+
+# Remove ratings for songs not in songs.csv
 df = df[df['song_id'].isin(songs['SongID'])]
 # Remove ratings for users not in Users.csv
 df = df[df['User-ID'].isin(users['User-ID'])]

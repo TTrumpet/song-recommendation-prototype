@@ -16,7 +16,7 @@ def getopt():
 
     # Description of the experiment in Weights & Biases. Feel free to change this to
     # whatever you want each time you run an experiment.
-    opt.description = 'Matrix Factorization 32-Dim (3)'
+    opt.description = 'Matrix Factorization 32-Dim'
     opt.archname = 'MF'
 
     opt.wandb = True  # Whether or not to log to Weights & Biases
