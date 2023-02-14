@@ -8,4 +8,7 @@ df = pd.read_csv('Datasets/Music/train_triplets.txt',
 songs = pd.read_csv('Datasets/Music/SongCSV.csv')
 users = pd.read_csv('Datasets/Music/user_data.csv')
 
-# == users.loc['User-ID'][i]]['song-id']['rating'])
+for i in range(len(users)):
+    id = users["User-ID"][i]
+    df_subset = df[df["User-ID"] == id]
+    print(df_subset)
