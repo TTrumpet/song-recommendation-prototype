@@ -8,7 +8,16 @@ df = pd.read_csv('Datasets/Music/train_triplets.txt',
 songs = pd.read_csv('Datasets/Music/SongCSV.csv')
 users = pd.read_csv('Datasets/Music/user_data.csv')
 
+df_new_ratings = pd.DataFrame(columns=['Rating'])
+
 for i in range(len(users)):
     id = users["User-ID"][i]
-    df_subset = df[df["User-ID"] == id]
-    print(df_subset)
+    #df_subset = df[df["User-ID"] == id]
+    df_subset = df.loc[df['User-ID'] == id]
+
+    # get z-score
+    df_subset = pd.DataFrame(((df_subset['Rating'] - df_subset['Rating'].mean()
+                               ) / df_subset['Rating'].std()).abs(), columns=['Rating'])
+    df_new_ratings = pd.concat([df_new_ratings, df_subset])
+
+print(df_new_ratings)
