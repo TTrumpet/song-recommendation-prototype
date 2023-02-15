@@ -11,7 +11,5 @@ Note: Must unzip and add MillionSongSubset Directory and train_triplets.txt with
 
 Instructions for training the model:
 
-1. Run msdHDF5toCSV.py (within Datasets\Music Directory)
-2. Run create_user_data.py
-3. Run split_csv.py
-4. Run main.py
+1. Run split_csv.py
+2. Run main.py
