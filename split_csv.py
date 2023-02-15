@@ -3,12 +3,17 @@
 
 import num_played_to_rating
 import preprocess_songcsv
+import msdHDF5toCSV
+import create_user_data
 import pandas as pd
 import numpy as np
 
 # Load the Ratings CSV file
 df = pd.read_csv('Datasets/Music/train_triplets.txt',
                  delimiter='\t', names=['User-ID', 'SongID', 'Rating'])
+
+# Create Song CSV file
+msdHDF5toCSV.main()
 
 # Load Songs CSV file
 songs = pd.read_csv('Datasets/Music/SongCSV.csv')
@@ -17,6 +22,10 @@ songs = pd.read_csv('Datasets/Music/SongCSV.csv')
 preprocess_songcsv.remove_trailing_characters(songs)
 
 # preprocess 'number of times played' to 'rating'
+num_played_to_rating.main()
+
+# create user data CSV
+create_user_data.main()
 
 
 songs = pd.read_csv('Datasets/Music/SongCSV.csv')
