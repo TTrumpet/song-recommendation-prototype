@@ -1,7 +1,7 @@
 # Given that the original Books dataset does has a single CSV file with the ratings,
 # we will need to manually split it into train and test sets.
 
-import num_played_to_rating
+# import num_played_to_rating
 import preprocess_songcsv
 import msdHDF5toCSV
 import create_user_data
@@ -22,7 +22,7 @@ songs = pd.read_csv('Datasets/Music/SongCSV.csv')
 preprocess_songcsv.remove_trailing_characters(songs)
 
 # preprocess 'number of times played' to 'rating'
-num_played_to_rating.main()
+# num_played_to_rating.main()
 
 # create user data CSV
 create_user_data.main()
