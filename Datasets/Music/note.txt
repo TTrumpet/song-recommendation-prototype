@@ -1,0 +1,5 @@
+Code will add data into this directory.
+
+Put Million Song Subset Data in this directory (unzipped tar.gz using tar -xf FILE_NAME command).
+
+Put train_triplets.txt in this directory.
