@@ -25,7 +25,7 @@ print("Done preprocessing SongCSV.csv")
 
 # preprocess 'number of times played' to 'rating'
 num_played_to_rating.main()
-df = pd.read_csv('Datasets/Music/train_triplets.txt')
+df = pd.read_csv('Datasets/Music/train_triplets.csv')
 print("Done creating train_triplets.csv")
 
 # create user data CSV
