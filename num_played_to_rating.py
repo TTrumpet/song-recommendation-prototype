@@ -34,4 +34,4 @@ def main():
 
     df_0['Rating'] = df['Rating']
 
-    df.to_csv('Datasets/Music/train_triplets.csv')
+    df_0.to_csv('Datasets/Music/train_triplets.csv')
