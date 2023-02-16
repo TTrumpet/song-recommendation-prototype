@@ -5,38 +5,26 @@ import numpy as np
 def main():
 
     # Load the files
-    df = pd.read_csv('Datasets/Music/train_triplets.txt',
-                     delimiter='\t', names=['User-ID', 'SongID', 'Rating'])
+    df_0 = pd.read_csv('Datasets/Music/train_triplets.txt',
+                       delimiter='\t', names=['User-ID', 'SongID', 'Rating'])
 
-    users = pd.read_csv('Datasets/Music/user_data.csv')
+    df = df_0
 
-    df_new_ratings = pd.DataFrame(columns=['Rating'])
+    df = df.drop(['SongID'], axis=1)
 
-    for i in range(len(users)):
+    # group by same user id
+    group = df.groupby('User-ID')
 
-        df_subset = df.loc[lambda df: df['User-ID'] == users['User-ID'][i]]
+    # get mean and standard deviation
+    group = pd.DataFrame(group['Rating'].agg([np.mean, np.std]))
 
-        # get z-score
-        df_subset_ratings = pd.DataFrame((df_subset['Rating'] - df_subset['Rating'].mean()
-                                          ) / df_subset['Rating'].std(), columns=['Rating'])
+    df = pd.merge(df, group, on='User-ID', how='outer')
 
-        # fill Nan with 0
-        #df_subset.fillna(0, inplace=True)
-
-        # cut (clip) greater than 3 or lower than -3
-        #df_subset['Rating'] = df_subset['Rating'].clip(-3.0, 3.0)
-
-        # convert to range 0-5
-        # df_subset['Rating'] = df_subset['Rating'].apply(
-        #    lambda x: (5/6) * (x+3))
-
-        df_new_ratings = pd.concat([df_new_ratings, df_subset_ratings])
-        print(df_new_ratings)
-
-    df['Ratings'] = df_new_ratings['Rating']
+    # get z-score
+    df['Rating'] = (df['Rating'] - df['mean']) / df['std']
 
     # fill NaN with 0
-    df.fillna(0, inplace=True)
+    df['Rating'].fillna(0, inplace=True)
 
     # cut range to between -3 and 3
     df['Rating'] = df['Rating'].clip(-3.0, 3.0)
@@ -44,11 +32,6 @@ def main():
     # change range to between 0 and 5
     df['Rating'] = df['Rating'].apply(lambda x: (5/6) * (x+3))
 
-    print(df)
+    df_0['Rating'] = df['Rating']
+
     df.to_csv('Datasets/Music/train_triplets.csv')
-    # output_file = open('Datasets/Music/train_triplets.txt', 'w')
-    # output_file.write(df)
-    # output_file.close()
-
-
-main()

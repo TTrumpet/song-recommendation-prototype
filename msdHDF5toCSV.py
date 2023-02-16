@@ -289,6 +289,3 @@ def main():
             songH5File.close()
 
     outputFile1.close()
-
-
-main()

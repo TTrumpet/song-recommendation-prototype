@@ -14,20 +14,23 @@ df = pd.read_csv('Datasets/Music/train_triplets.txt',
 
 # Create Song CSV file
 msdHDF5toCSV.main()
+print("Done creating SongCSV.csv")
 
 # Load Songs CSV file
 songs = pd.read_csv('Datasets/Music/SongCSV.csv')
 
 # preprocess SongCSV to remove trailing characters
 preprocess_songcsv.remove_trailing_characters(songs)
+print("Done preprocessing SongCSV.csv")
 
 # preprocess 'number of times played' to 'rating'
 num_played_to_rating.main()
-# df = pd.read_csv('Datasets/Music/train_triplets.txt')
+df = pd.read_csv('Datasets/Music/train_triplets.txt')
+print("Done creating train_triplets.csv")
 
 # create user data CSV
 create_user_data.main()
-
+print("Done creating user_data.csv")
 
 songs = pd.read_csv('Datasets/Music/SongCSV.csv')
 users = pd.read_csv('Datasets/Music/user_data.csv')
