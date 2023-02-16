@@ -1,6 +1,6 @@
 import pandas as pd
 
-# Load the Ratings CSV file
+# Load the file
 df = pd.read_csv('Datasets/Music/train_triplets.txt',
                  delimiter='\t', names=['User-ID', 'SongID', 'Rating'])
 
