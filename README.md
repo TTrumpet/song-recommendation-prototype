@@ -2,7 +2,7 @@
 
 Echo Nest Taste Profile Subset - http://millionsongdataset.com/sites/default/files/challenge/train_triplets.txt.zip
 
-Million Song Dataset - http://labrosa.ee.columbia.edu/~dpwe/tmp/millionsongsubset.tar.gz
+Million Song Dataset (Subset) - http://labrosa.ee.columbia.edu/~dpwe/tmp/millionsongsubset.tar.gz
 
 Note: Must unzip and add MillionSongSubset Directory and train_triplets.txt within Datasets/Music Directory
 
