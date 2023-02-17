@@ -1,6 +1,6 @@
 # song-recommendation-prototype
 
-Echo Nest Taste Profile Subset - http://millionsongdataset.com/sites/default/files/challenge/train_triplets.txt.zip
+Echo Nest Taste Profile (Full Subset) - http://millionsongdataset.com/sites/default/files/challenge/train_triplets.txt.zip
 
 Million Song Dataset (Subset) - http://labrosa.ee.columbia.edu/~dpwe/tmp/millionsongsubset.tar.gz
 
