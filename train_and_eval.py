@@ -38,7 +38,7 @@ def evaluate(val_dataloader, model, criterion, opt, epoch):
             n = 10
             wandb.log({"Predictions": wandb.Table(dataframe=pd.DataFrame({
                 'User ID': user_id[:n],
-                'Book ID': song_id[:n],
+                'Song ID': song_id[:n],
                 'Pred Rating': pred_rating.cpu().detach().numpy().flatten()[:n],
                 'Actual Rating': rating.cpu().detach().numpy().flatten()[:n]
             }))})
