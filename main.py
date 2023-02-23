@@ -79,3 +79,5 @@ if __name__ == '__main__':
                          wandb_log=opt.wandb)
 
             scheduler.step()
+
+    # Export the model after training is done

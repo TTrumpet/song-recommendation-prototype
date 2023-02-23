@@ -17,14 +17,6 @@ import random
 
 from collections import Counter
 
-# Let's create our own dataset class from the Books Dataset CSV Files! :D
-# Pytorch has a Dataset class that we can inherit from to create our own dataset class,
-# and it is flexible enough to do so by overriding the __init__, __len__, and __getitem__ methods.
-# By using this template, we can create our own dataset class for any dataset we want to use;
-# we just need the data, which usually comes in the form of a single or multiple CSV files.
-# The dataset we will be using is the Books Dataset, which can be found on Kaggle:
-# https://www.kaggle.com/datasets/arashnic/book-recommendation-dataset
-
 
 class Music(Dataset):
     def __init__(self, split='train', opt=None):
@@ -45,13 +37,13 @@ class Music(Dataset):
             'Datasets/Music/user_data.csv', dtype={'User-ID': str})
 
         self.all_songs = pd.read_csv('Datasets/Music/SongCSV.csv', dtype={'SongNumber': int, 'SongID': str, 'AlbumID': str, 'AlbumName': str, 'ArtistID': str, 'ArtistLatitude': float, 'ArtistLocation': str,
-                                                                             'ArtistLongitude': float, 'ArtistName': str, 'Danceability': float, 'Duration': float, 'KeySignature': int, 'KeySignatureConfidence': float, 'Tempo': float, 'TimeSignature': int, 'TimeSignatureConfidence': float, 'Title': str, 'Year': int})
+                                                                          'ArtistLongitude': float, 'ArtistName': str, 'Danceability': float, 'Duration': float, 'KeySignature': int, 'KeySignatureConfidence': float, 'Tempo': float, 'TimeSignature': int, 'TimeSignatureConfidence': float, 'Title': str, 'Year': int})
 
         # Note: Including the dtype parameter in the pd.read_csv function (^) is not necessary,
         # but it is good practice to do so, as it will prevent pandas from having to infer
         # the data type of each column, which can be slow for large datasets.
 
-        # Get (User ID, Book ID, User Rating) tuples
+        # Get (User ID, Song ID, User Rating) tuples
         self.user_ids = self.ratings['User-ID'].values
         self.song_ids = self.ratings['SongID'].values
         self.ratings = self.ratings['Rating'].values
@@ -68,6 +60,8 @@ class Music(Dataset):
             self.all_users['User-ID'].values)
         self.song_id_encoder = LabelEncoder().fit(
             self.all_songs['SongID'].values)
+
+        # Save trained label encoders as JSON files
 
         self.index_user_ids = self.user_id_encoder.transform(self.user_ids)
         self.index_song_ids = self.song_id_encoder.transform(self.song_ids)
@@ -92,7 +86,7 @@ class Music(Dataset):
         # Convert Rating to Torch Tensor (fancy array)
         rating = torch.tensor(rating, dtype=torch.float32)
 
-        # Encode the user ID and book ID
+        # Encode the user ID and song ID
         index_user_id = self.index_user_ids[idx]
         index_song_id = self.index_song_ids[idx]
 
@@ -107,7 +101,7 @@ class Music(Dataset):
 
 if __name__ == "__main__":
 
-    # ---------------------- Testing our Books Dataset class --------------------- #
+    # ---------------------- Testing our Songs Dataset class --------------------- #
     parser = argparse.ArgumentParser()
     opt = getopt()  # Get the options from the config file
 
