@@ -67,6 +67,10 @@ class Music(Dataset):
         self.index_song_ids = self.song_id_encoder.transform(self.song_ids)
 
         print("Loaded data, total number of ratings: ", len(self.ratings))
+        
+        df = pd.DataFrame(self.index_user_ids, self.index_song_ids, columns=['SongID', 'UserID'])
+        
+        json_data = df.to_json('trained_label_encoders.json')
 
     def __getitem__(self, idx):
         # The __getitem__ method is used to get a single item from the dataset
