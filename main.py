@@ -81,3 +81,23 @@ if __name__ == '__main__':
             scheduler.step()
 
     # Export the model after training is done
+
+    # --------------------------- Saving our Model ---------------------------- #
+    FILE = "model.pt" #(PATH)
+    torch.save(model, FILE)
+
+    # Then later when you need to load:
+    # model = torch.load(FILE)
+    # If you need to turn off training mode to run inference:
+    # model.eval()
+
+
+
+    # If you need to use TorchScript Format:
+    # model_scripted = torch.jit.script(model) # Export to TorchScript
+    # model_scripted.save('model_scripted.pt') # Save
+
+    # Load:
+    # model = torch.jit.load('model_scripted.pt')
+    # model.eval()
+    
