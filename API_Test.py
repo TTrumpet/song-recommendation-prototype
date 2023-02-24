@@ -1,5 +1,6 @@
 from tqdm import tqdm
 from sklearn.preprocessing import LabelEncoder
+from sklearn.metrics.pairwise import cosine_similarity
 import pandas as pd
 import numpy as np
 import torch
@@ -18,19 +19,19 @@ class MatrixFactorization(nn.Module):
 
         # Create the embedding layers for our users and songs
         self.user_embedding = nn.Embedding(num_users, embedding_size)
-        self.book_embedding = nn.Embedding(num_songs, embedding_size)
+        self.song_embedding = nn.Embedding(num_songs, embedding_size)
 
         # Initialize the embeddings with a normal distribution
         self.user_embedding.weight.data.normal_(0, 0.1)
-        self.book_embedding.weight.data.normal_(0, 0.1)
+        self.song_embedding.weight.data.normal_(0, 0.1)
 
     def forward(self, user_id, song_id):
         # Get the embeddings for the user and song
         user_embedding = self.user_embedding(user_id)
-        book_embedding = self.book_embedding(song_id)
+        song_embedding = self.song_embedding(song_id)
 
         # Compute the dot product between the embeddings
-        dot_product = torch.sum(user_embedding * book_embedding, dim=1)
+        dot_product = torch.sum(user_embedding * song_embedding, dim=1)
 
         # Pass the dot product through a sigmoid function
         output = torch.sigmoid(dot_product)
@@ -42,10 +43,10 @@ class MatrixFactorization(nn.Module):
 
     def predict_ratings(self, user_embedding, song_ids):
         # Get the embeddings for the songs
-        book_embeddings = self.book_embedding(song_ids)
+        song_embeddings = self.song_embedding(song_ids)
 
         # Compute the dot product between the embeddings
-        dot_product = torch.sum(user_embedding * book_embeddings, dim=1)
+        dot_product = torch.sum(user_embedding * song_embeddings, dim=1)
 
         # Pass the dot product through a sigmoid function
         output = torch.sigmoid(dot_product)
@@ -129,8 +130,21 @@ def getNearestNeighborEmbedding(model, media_ratings):
                                        ratings to the user you are trying to predict for.
     """
 
-    ## Implement this function :) ##
-    pass
+    # run media_ratings through model for new_user
+    new_user = model(media_ratings)
+
+    # transform new_user into embedding (?)
+
+    # store trained embeddings
+    embeddings = nn.Embedding.from_pretrained(model.state_dict())
+
+    # find cosine similarity between new user and all other user embeddings
+    # batch cosine similarity?
+    similarity_scores = pd.DataFrame(
+        cosine_similarity(new_user, embeddings), columns=['Score'])
+
+    # return most similar user's embeddings
+    return similarity_scores.sort_values('Score', ascending=False)[0]
 
 
 def getApproximateEmbedding(model, media_ratings):
@@ -186,15 +200,15 @@ def test_model(model_path, media_csv_path, label_encoder_path, number_users=100,
         # Generate random IDs for the Media
         random_ids = get_n_random_ids(media_csv_path, n=number_predictions)
 
+        # Encode the IDs
+        ids_encoded = id_encoder.transform(random_ids)
+
         # Generate random ratings
-        random_ratings = get_random_ratings(random_ids)
+        random_ratings = get_random_ratings(ids_encoded)
 
         # Generate random IDs for medias that the user has not rated
         # but we want to make predictions for
         ids_to_predict = get_n_random_ids(media_csv_path, n=number_predictions)
-
-        # Encode the IDs
-        ids_encoded = id_encoder.transform(random_ids)
 
         # Get the nearest neighbor embedding
         nearest_neighbor_embedding = getNearestNeighborEmbedding(
