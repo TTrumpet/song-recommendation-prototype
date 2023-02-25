@@ -1,6 +1,5 @@
 from tqdm import tqdm
 from sklearn.preprocessing import LabelEncoder
-from sklearn.metrics.pairwise import cosine_similarity
 import pandas as pd
 import numpy as np
 import torch
@@ -130,21 +129,22 @@ def getNearestNeighborEmbedding(model, media_ratings):
                                        ratings to the user you are trying to predict for.
     """
 
-    # run media_ratings through model for new_user
-    new_user = model(media_ratings)
+    # create a tensor for user
+    user_ratings = torch.tensor(
+        [rating for _, rating in media_ratings]).float()
 
-    # transform new_user into embedding (?)
+    # get rating for user
+    user_ratings = model(user_ratings)
 
-    # get trained embeddings
-    embeddings = nn.Embedding.from_pretrained(model.song_embedding.weight.data)
+    # Get the embeddings for all users
+    embeddings = model.user_embeddings.weight
 
-    # find cosine similarity between new user and all other user embeddings
-    # batch cosine similarity?
-    similarity_scores = pd.DataFrame(
-        cosine_similarity(new_user, embeddings), columns=['Score'])
+    # Compute cosine similarity between the user's ratings and all other users
+    similarities = torch.nn.functional.cosine_similarity(
+        embeddings, user_ratings, dim=1)
 
-    # return most similar user's embeddings
-    return similarity_scores.sort_values('Score', ascending=False)[0]
+    # find and return the embedding of the user with the highest similarity
+    return embeddings[torch.argmax(similarities)]
 
 
 def getApproximateEmbedding(model, media_ratings):
