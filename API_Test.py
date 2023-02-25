@@ -135,8 +135,8 @@ def getNearestNeighborEmbedding(model, media_ratings):
 
     # transform new_user into embedding (?)
 
-    # store trained embeddings
-    embeddings = nn.Embedding.from_pretrained(model.state_dict())
+    # get trained embeddings
+    embeddings = nn.Embedding.from_pretrained(model.song_embedding.weight.data)
 
     # find cosine similarity between new user and all other user embeddings
     # batch cosine similarity?
