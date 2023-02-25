@@ -72,13 +72,15 @@ class Music(Dataset):
         num_songs = len(self.song_id_encoder.classes_)
         song_ids = self.song_id_encoder.classes_.tolist()
 
-        with open('label_encoder.json', 'w') as f:
-            json.dump({'num_users': num_users, 'user_ids': user_ids, 'num_songs': num_songs, 'song_ids': song_ids}, f)
-        
+        with open('Datasets/Music/label_encoder.json', 'w') as f:
+            json.dump({'num_users': num_users, 'user_ids': user_ids,
+                       'num_songs': num_songs, 'song_ids': song_ids}, f)
+
         self.index_user_ids = self.user_id_encoder.transform(self.user_ids)
         self.index_song_ids = self.song_id_encoder.transform(self.song_ids)
-        
+
         print("Loaded data, total number of ratings: ", len(self.ratings))
+
     def __getitem__(self, idx):
         # The __getitem__ method is used to get a single item from the dataset
         # given an index. It is used by the DataLoader class to create batches of data.

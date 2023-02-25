@@ -181,8 +181,12 @@ def test_model(model_path, media_csv_path, label_encoder_path, number_users=100,
         number_predictions (int, optional): Number of medias to make predictions for. Defaults to 10.
     """
 
+    with open(label_encoder_path, 'r') as j:
+        label_encoder = json.loads(j.read())
+
     # Load the model
-    # model = MatrixFactorization(...)
+    model = MatrixFactorization(
+        label_encoder['num_users'], label_encoder['num_songs'])
 
     # Load the model's state dictionary (trained weights)
     model.load_state_dict(torch.load(model_path))
@@ -235,13 +239,13 @@ def test_model(model_path, media_csv_path, label_encoder_path, number_users=100,
 
 if __name__ == "__main__":
     # Path to the trained model
-    model_path = "path/to/your/model.pt"
+    model_path = "Datasets/Music/model.pt"
 
     # Path to the CSV file containing the media IDs and names
-    media_csv_path = "path/to/your/media.csv"
+    media_csv_path = "Datasets/Music/SongCSV.csv"
 
     # Path to the JSON file containing the LabelEncoder data
-    label_encoder_path = "path/to/your/label_encoder.json"
+    label_encoder_path = "Datasets/Music/label_encoder.json"
 
     # Number of random users to generate ratings for
     number_users = 100
