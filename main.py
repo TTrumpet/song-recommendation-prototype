@@ -32,6 +32,9 @@ if __name__ == '__main__':
     # Set the Loss Function
     criterion = nn.MSELoss()
 
+    # Set file for saving the model
+    FILE = "Datasets/Music/model.pt"  # (PATH)
+
     # ------------------------------- Load Our Data ------------------------------ #
     train_dataset = dataloader.Music(split=opt.trainset, opt=opt)
     val_dataset = dataloader.Music(split=opt.testset, opt=opt)
@@ -64,11 +67,14 @@ if __name__ == '__main__':
 
     # --------------------------- Training our Model ---------------------------- #
     _ = model.to(opt.device)
-    wandb.watch(model, criterion, log="all")
+    if opt.wandb:
+        wandb.watch(model, criterion, log="all")
 
     for epoch in range(opt.n_epochs):
         evaluate(val_dataloader=val_dataloader, model=model,
                  criterion=criterion, epoch=epoch, opt=opt)
+        # Save newest weights per epoch
+        torch.save(model.state_dict(), FILE)
         if not opt.evaluate:
             _ = model.train()
             loss = train(train_dataloader=train_dataloader,
@@ -83,8 +89,7 @@ if __name__ == '__main__':
     # Export the model after training is done
 
     # --------------------------- Saving our Model ---------------------------- #
-    FILE = "Datasets/Music/model.pt"  # (PATH)
-    torch.save(model, FILE)
+    torch.save(model.state_dict(), FILE)
 
     # Then later when you need to load:
     # model = torch.load(FILE)
