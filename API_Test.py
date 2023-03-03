@@ -7,6 +7,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import time
 import json
+from sklearn.metrics.pairwise import cosine_similarity
 
 
 class MatrixFactorization(nn.Module):
@@ -45,7 +46,7 @@ class MatrixFactorization(nn.Module):
         song_embeddings = self.song_embedding(song_ids)
 
         # Compute the dot product between the embeddings
-        dot_product = torch.sum(user_embedding * song_embeddings, dim=1)
+        dot_product = user_embedding @ song_embeddings.t()
 
         # Pass the dot product through a sigmoid function
         output = torch.sigmoid(dot_product)
@@ -68,7 +69,7 @@ def getIDLabelEncoder(path):
         sklearn.preprocessing.LabelEncoder: LabelEncoder for the Media IDs.
     """
     with open(path, 'r') as f:
-        id_encoder = LabelEncoder().fit(json.load(f))
+        id_encoder = LabelEncoder().fit(json.load(f)['song_ids'])
 
     return id_encoder
 
@@ -88,7 +89,7 @@ def get_n_random_ids(media_csv_path, n=10):
     media = pd.read_csv(media_csv_path)
 
     # Get the IDs
-    ids = media['ID'].values
+    ids = media['SongID'].values
 
     # Get n random IDs
     random_ids = np.random.choice(ids, size=n, replace=False)
@@ -128,23 +129,42 @@ def getNearestNeighborEmbedding(model, media_ratings):
         torch.Tensor (embedding_size): Embedding for the user that has the most similar
                                        ratings to the user you are trying to predict for.
     """
+    song_ids = []
+    ratings = []
 
-    # create a tensor for user
-    user_ratings = torch.tensor(
-        [rating for _, rating in media_ratings]).float()
+    for i in media_ratings:
+        song_ids.append(i[0])
+        ratings.append(i[1])
 
-    # get rating for user
-    user_ratings = model(user_ratings)
+    # get user embeddings in dataset
+    user_embedding = nn.Embedding.from_pretrained(
+        model.user_embedding.weight.data)
 
-    # Get the embeddings for all users
-    embeddings = model.user_embeddings.weight
+    all_users = pd.read_csv(
+        'Datasets/Music/user_data.csv', dtype={'User-ID': str})
 
-    # Compute cosine similarity between the user's ratings and all other users
-    similarities = torch.nn.functional.cosine_similarity(
-        embeddings, user_ratings, dim=1)
+    with open('Datasets/Music/label_encoder.json', 'r') as f:
+        user_id_encoder = LabelEncoder().fit(json.load(f)['user_ids'])
+
+    all_users = user_id_encoder.transform(all_users['User-ID'])
+
+    # compute rating of songs for each user
+    all_user_embedding = user_embedding(torch.tensor(all_users))
+    all_rated_song_embedding = torch.tensor(song_ids)
+
+    # get predicted ratings
+    all_rating = model.predict_ratings(
+        all_user_embedding, all_rated_song_embedding)
+
+    # get tensor for user provided ratings
+    user_provided_ratings = torch.tensor(ratings)
+    user_provided_ratings = torch.unsqueeze(user_provided_ratings, 0)
+
+    # perform nearest neighbor search through predicted ratings
+    similarities = torch.cosine_similarity(all_rating, user_provided_ratings)
 
     # find and return the embedding of the user with the highest similarity
-    return embeddings[torch.argmax(similarities)]
+    return user_embedding(torch.argmax(similarities))
 
 
 def getApproximateEmbedding(model, media_ratings):
@@ -189,7 +209,8 @@ def test_model(model_path, media_csv_path, label_encoder_path, number_users=100,
         label_encoder['num_users'], label_encoder['num_songs'])
 
     # Load the model's state dictionary (trained weights)
-    model.load_state_dict(torch.load(model_path))
+    model.load_state_dict(torch.load(
+        model_path, map_location=torch.device('cpu')))
 
     # Load the ID LabelEncoder
     id_encoder = getIDLabelEncoder(label_encoder_path)
@@ -213,10 +234,14 @@ def test_model(model_path, media_csv_path, label_encoder_path, number_users=100,
         # Generate random IDs for medias that the user has not rated
         # but we want to make predictions for
         ids_to_predict = get_n_random_ids(media_csv_path, n=number_predictions)
+        ids_to_predict = torch.tensor(id_encoder.transform(ids_to_predict))
 
         # Get the nearest neighbor embedding
         nearest_neighbor_embedding = getNearestNeighborEmbedding(
             model, random_ratings)
+
+        nearest_neighbor_embedding = torch.unsqueeze(
+            nearest_neighbor_embedding, 0)
 
         # Get the approximate embedding
         approximate_embedding = getApproximateEmbedding(model, random_ratings)
@@ -239,13 +264,13 @@ def test_model(model_path, media_csv_path, label_encoder_path, number_users=100,
 
 if __name__ == "__main__":
     # Path to the trained model
-    model_path = "Datasets/Music/model.pt"
+    model_path = 'Datasets/Music/model.pt'
 
     # Path to the CSV file containing the media IDs and names
-    media_csv_path = "Datasets/Music/SongCSV.csv"
+    media_csv_path = 'Datasets/Music/SongCSV.csv'
 
     # Path to the JSON file containing the LabelEncoder data
-    label_encoder_path = "Datasets/Music/label_encoder.json"
+    label_encoder_path = 'Datasets/Music/label_encoder.json'
 
     # Number of random users to generate ratings for
     number_users = 100
