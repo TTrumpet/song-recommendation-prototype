@@ -7,6 +7,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import time
 import json
+from sklearn.metrics.pairwise import cosine_similarity
 
 
 class MatrixFactorization(nn.Module):
@@ -45,7 +46,7 @@ class MatrixFactorization(nn.Module):
         song_embeddings = self.song_embedding(song_ids)
 
         # Compute the dot product between the embeddings
-        dot_product = torch.sum(user_embedding * song_embeddings, dim=1)
+        dot_product = user_embedding @ song_embeddings.t()
 
         # Pass the dot product through a sigmoid function
         output = torch.sigmoid(dot_product)
@@ -135,14 +136,6 @@ def getNearestNeighborEmbedding(model, media_ratings):
         song_ids.append(i[0])
         ratings.append(i[1])
 
-    # extract song embeddings user has rated
-    embedding = nn.Embedding.from_pretrained(
-        model.song_embedding.weight.data)
-
-    song_embedding = (embedding(torch.tensor(song_ids)))
-
-    # print(song_embeddings)
-
     # get user embeddings in dataset
     user_embedding = nn.Embedding.from_pretrained(
         model.user_embedding.weight.data)
@@ -156,30 +149,22 @@ def getNearestNeighborEmbedding(model, media_ratings):
     all_users = user_id_encoder.transform(all_users['User-ID'])
 
     # compute rating of songs for each user
-    predictions = []
+    all_user_embedding = user_embedding(torch.tensor(all_users))
+    all_rated_song_embedding = torch.tensor(song_ids)
 
-    for i in range(len(all_users)):
-        user = []
-        for j in range(len(song_ids)):
+    # get predicted ratings
+    all_rating = model.predict_ratings(
+        all_user_embedding, all_rated_song_embedding)
 
-            print(user_embedding(torch.tensor(i))
-                  * torch.tensor(song_embedding[j]))
-
-            rating = model.predict_ratings(
-                user_embedding(torch.tensor(i)), song_ids[j])
-
-            user.append(torch.tensor(rating))
-        predictions.append(user)
-
-    print(predictions)
+    # get tensor for user provided ratings
+    user_provided_ratings = torch.tensor(ratings)
+    user_provided_ratings = torch.unsqueeze(user_provided_ratings, 0)
 
     # perform nearest neighbor search through predicted ratings
-    similarities = torch.cosine_similarity(
-        predictions, torch.tensor(ratings))
-    print(similarities)
+    similarities = torch.cosine_similarity(all_rating, user_provided_ratings)
 
     # find and return the embedding of the user with the highest similarity
-    return user_embedding[torch.argmax(similarities)]
+    return user_embedding(torch.argmax(similarities))
 
 
 def getApproximateEmbedding(model, media_ratings):
@@ -249,10 +234,14 @@ def test_model(model_path, media_csv_path, label_encoder_path, number_users=100,
         # Generate random IDs for medias that the user has not rated
         # but we want to make predictions for
         ids_to_predict = get_n_random_ids(media_csv_path, n=number_predictions)
+        ids_to_predict = torch.tensor(id_encoder.transform(ids_to_predict))
 
         # Get the nearest neighbor embedding
         nearest_neighbor_embedding = getNearestNeighborEmbedding(
             model, random_ratings)
+
+        nearest_neighbor_embedding = torch.unsqueeze(
+            nearest_neighbor_embedding, 0)
 
         # Get the approximate embedding
         approximate_embedding = getApproximateEmbedding(model, random_ratings)
